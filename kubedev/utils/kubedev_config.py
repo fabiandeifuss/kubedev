@@ -1,3 +1,4 @@
+import git
 import os
 
 kubeconfig_temp_path = os.path.join('.kubedev', 'kube_config_tmp')
@@ -79,7 +80,7 @@ class KubedevConfig:
     images = dict()
     globalBuildEnvs = KubedevConfig.load_envs(kubedev, True, False)
     globalContainerEnvs = KubedevConfig.load_envs(kubedev, False, True)
-    tag = KubedevConfig.get_tag(env_accessor)
+    tag = KubedevConfig.get_tag()
     imageRegistry = kubedev["imageRegistry"]
     name = kubedev["name"]
     if "deployments" in kubedev:
@@ -104,13 +105,14 @@ class KubedevConfig:
       return f"./{image_name}/"
 
   @staticmethod
-  def get_tag(env_accessor):
-    commit, branch = (env_accessor.getenv('CI_COMMIT_SHORT_SHA'),
-                      env_accessor.getenv('CI_COMMIT_REF_NAME'))
+  def get_tag():
+    repo   = git.Repo(".")
+    commit = repo.git.rev_parse(repo.head.commit.hexsha, short=8)
+    branch = repo.head.reference
     if not isinstance(commit, type(None)) and not isinstance(branch, type(None)):
       return f'{commit}_{branch}'
     else:
-      return 'none'  # When outside of the CI environment, the tag usually will be overwritten by tilt anyways, so it is irrelevant
+      return 'none'  # if git repo is not initialized yet
 
   @staticmethod
   def collapse_names(first, second):

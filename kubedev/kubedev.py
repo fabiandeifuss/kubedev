@@ -318,7 +318,7 @@ class Kubedev:
 
   def _template_or_deploy(self, kubedev, command, shell_executor, env_accessor, file_accessor, get_output=False):
     variables = KubedevConfig.get_global_variables(kubedev)
-    tag = KubedevConfig.get_tag(env_accessor)
+    tag = KubedevConfig.get_tag()
     kubeconfig = KubedevConfig.get_kubeconfig_path(env_accessor, file_accessor)
     command = [
         '/bin/sh',
