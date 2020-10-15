@@ -414,6 +414,17 @@ class Kubedev:
                         env_accessor=RealEnvAccessor()):
     try:
       polaris_config_exists = False if not kubedev["polaris-config"] else True
+      if path.isfile(kubedev["polaris-config"]):
+        polaris_config_exists = True
+        print(
+          "Using custom polaris configuration file to audit the k8s spec."
+        )
+      else:
+        polaris_config_exists = False
+        print(
+          "❌  Custom polaris configuration file not found!\n"
+          "➡️   Using default configuration to audit the k8s spec."
+        )
     except KeyError:
       polaris_config_exists = False
     k8s_spec        = self.template_from_config(
