@@ -134,6 +134,12 @@ For used-frameworks "npm", it runs `npm audit`.
 
 Prints out a Markdown table with all environment variables declared in kubedev.json and their documentation.
 
+## kubedev audit
+
+Audits the k8s specification using polaris. If the custom configuration file 
+could not be found or was not specified, polaris falls back on using the 
+default configuration.
+
 ## kubedev up [--clean]
 
 ❌ _NOT IMPLEMENTED, YET_
